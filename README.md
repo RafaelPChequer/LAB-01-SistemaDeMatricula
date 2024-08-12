@@ -1,4 +1,4 @@
-# Nome do projeto
+# Sistema de Matrículas
 O sistema de matrículas gerencia informações sobre disciplinas, cursos, professores e alunos.
 
 - **Cursos:** Cada curso tem um nome, créditos e várias disciplinas.
