@@ -8,6 +8,16 @@ O sistema de matrículas gerencia informações sobre disciplinas, cursos, profe
 - **Professores:** Podem acessar o sistema para ver a lista de alunos em suas disciplinas.
 - **Segurança:** Todos os usuários têm senhas para login e validação.
 
+# Histórias de usuário
+* Como usuário do sistema, eu quero poder realizar login, para que seja possivel acessar as funcionalidades do sistema.
+
+* Como secretaria, eu quero poder gerar o curriculo de cada semestre, para que os alunos consigam realizar a matricula.
+
+* Como aluno, eu quero poder me matricular nas disciplinas, para que consiga avançar no curso.
+
+* Como professor quero poder acessar o sistema e ver quantos alunos estão matriculados, para poder planejar as aulas de acordo com a quantidade de alunos
+
+
 ## Integrantes
 * Rafael Parreira Chequer
 * Augusto de Souza Andrade
