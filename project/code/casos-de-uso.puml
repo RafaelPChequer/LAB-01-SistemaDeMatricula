@@ -17,22 +17,13 @@ skinparam actor {
 
 rectangle "Sistema de Matrícula" {
 
-:Usuário: --> (Realizar Login)
-
 :Administração: <-- (Realizar Matrícula)
 :Administração: <-- (Cancelar Matrícula)
-:Administração: --> (Atualizar Dados dos Alunos)
-:Administração: --> (Enviar Cobrança)
 
 :Aluno: --> (Realizar Matrícula)
 :Aluno: --> (Cancelar Matrícula)
-:Aluno: <-- (Atualizar Dados dos Alunos)
-:Aluno: <-- (Enviar Cobrança)
 
 :Professor: --> (Consultar Alunos Matriculados)
-
-(Realizar Matrícula) .> (Verificar Requisitos) : <<include>>
-(Cancelar Matrícula) .> (Verificar Requisitos) : <<include>>
 
 (Matricular em Optativa) .> (Realizar Matrícula) : <<extend>>
 }
