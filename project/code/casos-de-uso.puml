@@ -1,25 +1,40 @@
 @startuml
 'https://plantuml.com/use-case-diagram
 
+left to right direction
+
+skinparam usecase {
+    BackgroundColor Khaki
+}
+
+skinparam actor {
+    BackgroundColor Khaki
+}
+
 :Usuário: <|-- :Aluno:
 :Usuário: <|-- :Professor:
 :Usuário: <|-- :Administração:
 
-:Usuário: -- (Realizar Login)
+rectangle "Sistema de Matrícula" {
 
-:Administração: -- (Realizar Matrícula)
-:Administração: -- (Cancelar Matrícula)
-:Administração: -- (Atualizar Dados dos Alunos)
-:Administração: -- (Enviar Cobrança)
+:Usuário: --> (Realizar Login)
 
-:Aluno: -- (Realizar Matrícula)
-:Aluno: -- (Cancelar Matrícula)
-:Aluno: -- (Enviar Cobrança)
+:Administração: <-- (Realizar Matrícula)
+:Administração: <-- (Cancelar Matrícula)
+:Administração: --> (Atualizar Dados dos Alunos)
+:Administração: --> (Enviar Cobrança)
 
-:Professor: -- (Consultar Alunos Matriculados)
+:Aluno: --> (Realizar Matrícula)
+:Aluno: --> (Cancelar Matrícula)
+:Aluno: <-- (Atualizar Dados dos Alunos)
+:Aluno: <-- (Enviar Cobrança)
 
-(Matricular em Optativa) .> (Realizar Matrícula) : <<extend>>
+:Professor: --> (Consultar Alunos Matriculados)
+
 (Realizar Matrícula) .> (Verificar Requisitos) : <<include>>
 (Cancelar Matrícula) .> (Verificar Requisitos) : <<include>>
+
+(Matricular em Optativa) .> (Realizar Matrícula) : <<extend>>
+}
 
 @enduml
