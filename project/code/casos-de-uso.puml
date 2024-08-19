@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Usuário: <|-- :Aluno:
+:Usuário: <|-- :Professor:
+:Usuário: <|-- :Administração:
+
+:Usuário: -- (Realizar Login)
+
+:Administração: -- (Realizar Matrícula)
+:Administração: -- (Cancelar Matrícula)
+:Administração: -- (Atualizar Dados dos Alunos)
+:Administração: -- (Enviar Cobrança)
+
+:Aluno: -- (Realizar Matrícula)
+:Aluno: -- (Cancelar Matrícula)
+:Aluno: -- (Enviar Cobrança)
+
+:Professor: -- (Consultar Alunos Matriculados)
+
+(Matricular em Optativa) .> (Realizar Matrícula) : <<extend>>
+(Realizar Matrícula) .> (Verificar Requisitos) : <<include>>
+(Cancelar Matrícula) .> (Verificar Requisitos) : <<include>>
+
+@enduml
