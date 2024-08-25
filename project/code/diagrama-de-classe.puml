@@ -1,0 +1,67 @@
+@startuml
+
+class Usuario {
+  -id: int
+  -nome: String
+  -senha: String
+  +autenticar(): Boolean
+  +login(): Boolean
+  +logout(): Boolean
+}
+
+class Aluno{
+  -matricula: int
+  -disciplinasObrigatorias: List<Disciplina>
+  -disciplinasOptativas: List<Disciplina>
+  +matricularEmDisciplina(disciplina: Disciplina): Boolean
+  +cancelarMatricula(disciplina: Disciplina): Boolean
+}
+
+class Professor {
+  -disciplinas: List<Disciplina>
+  +consultarAlunosMatriculados(disciplina: Disciplina): List<Aluno>
+}
+
+class Secretaria {
+  +realizarMatricula(aluno: Aluno, disciplina: Disciplina): Boolean
+  +cancelarMatricula(aluno: Aluno, disciplina: Disciplina): Boolean
+}
+
+class Disciplina {
+  -codigo: int
+  -nome: String
+  -numCreditos: int
+  -maxAlunos: int = 60
+  -alunosMatriculados: List<Aluno>
+  +adicionarAluno(aluno: Aluno): Boolean
+  +removerAluno(aluno: Aluno): Boolean
+  +verificarVagas(): Boolean
+  +verificarMinimoAlunos(): Boolean
+}
+
+class Curso {
+  -nome: String
+  -numCreditos: int
+  -disciplinas: List<Disciplina>
+  +calcularTotalCreditos(): int
+}
+
+class SistemaDeMatricula {
+  +notificarSistemaDeCobranca(aluno: Aluno)
+}
+
+class SistemaDeCobranca {
+  +cobrarAluno(aluno: Aluno, disciplinas: List<Disciplina>)
+}
+
+Usuario <|-- Aluno
+Usuario <|-- Professor
+Usuario <|-- Secretaria
+Aluno "1" --> "*" Disciplina : matricula
+Professor "1" --> "*" Disciplina : ensina
+Secretaria "1" --> "*" Disciplina : gerencia
+Curso "1" --> "*" Disciplina : contem
+SistemaDeMatricula --> SistemaDeCobranca : notifica
+SistemaDeCobranca --> Aluno : cobra
+
+@enduml
