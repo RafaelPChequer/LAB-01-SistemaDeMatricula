@@ -1,8 +1,8 @@
-package code.professor;
+package Matricula.professor;
 
-import code.disciplina.Disciplina;
-import code.aluno.Aluno;
-import code.usuario.Usuario;
+import Matricula.disciplina.Disciplina;
+import Matricula.aluno.Aluno;
+import Matricula.usuario.Usuario;
 import java.util.List;
 
 public class Professor extends Usuario {

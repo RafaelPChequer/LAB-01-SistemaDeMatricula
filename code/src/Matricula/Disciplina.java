@@ -1,6 +1,6 @@
-package code.disciplina;
+package Matricula.disciplina;
 
-import code.aluno.Aluno;
+import Matricula.aluno.Aluno;
 import java.util.List;
 
 public class Disciplina {

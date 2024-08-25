@@ -1,8 +1,8 @@
-package code.secretaria;
+package Matricula.secretaria;
 
-import code.aluno.Aluno;
-import code.disciplina.Disciplina;
-import code.usuario.Usuario;
+import Matricula.aluno.Aluno;
+import Matricula.disciplina.Disciplina;
+import Matricula.usuario.Usuario;
 
 public class Secretaria extends Usuario {
 

@@ -1,7 +1,7 @@
-package code.aluno;
+package Matricula.aluno;
 
-import src.disciplina.Disciplina;
-import code.usuario.Usuario;
+import Matricula.disciplina.Disciplina;
+import Matricula.usuario.Usuario;
 import java.util.List;
 
 public class Aluno extends Usuario {

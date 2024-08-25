@@ -1,9 +1,9 @@
-package code.curso;
+package Matricula.curso;
 
-import code.disciplina.Disciplina;
-import java.util.List;
+import Matricula.disciplina.Disciplina;
+import Matricula.util.List;
 
-import code.disciplina.Disciplina;
+import Matricula.disciplina.Disciplina;
 import java.util.List;
 
 

@@ -1,4 +1,4 @@
-package code.usuario;
+package Matricula.usuario;
 
 public class Usuario {
     private int id;

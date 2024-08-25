@@ -1,7 +1,7 @@
-package code.sistema;
+package Matricula.sistema;
 
-import code.aluno.Aluno;
-import code.disciplina.Disciplina;
+import Matricula.aluno.Aluno;
+import Matricula.disciplina.Disciplina;
 import java.util.List;
 
 public class SistemaDeCobranca {

@@ -1,6 +1,6 @@
-package code.sistema;
+package Matricula.sistema;
 
-import code.aluno.Aluno;
+import Matricula.aluno.Aluno;
 
     public void notificarSistemaDeCobranca(Aluno aluno) {
         // Implementação da notificação do sistema de cobrança
