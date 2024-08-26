@@ -1,13 +1,13 @@
 package Matricula;
 
-import Matricula.aluno.Aluno;
-import Matricula.curso.Curso;
-import Matricula.disciplina.Disciplina;
-import Matricula.professor.Professor;
-import Matricula.secretaria.Secretaria;
-import Matricula.sistema.SistemaDeCobranca;
-import Matricula.sistema.SistemaDeMatricula;
-import Matricula.usuario.Usuario;
+import Matricula.Aluno;
+import Matricula.Curso;
+import Matricula.Disciplina;
+import Matricula.Professor;
+import Matricula.Secretaria;
+import Matricula.SistemaDeCobranca;
+import Matricula.SistemaDeMatricula;
+import Matricula.Usuario;
 
 public class Main {
     public static void main(String[] args) {

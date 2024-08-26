@@ -1,9 +1,8 @@
-package Matricula.aluno;
+package Matricula;
 
 import Matricula.disciplina.Disciplina;
 import Matricula.usuario.Usuario;
 import java.util.List;
-
 public class Aluno extends Usuario {
     private int matricula;
     private List<Disciplina> disciplinasObrigatorias;

@@ -1,4 +1,4 @@
-package Matricula.disciplina;
+package Matricula;
 
 import Matricula.aluno.Aluno;
 import java.util.List;

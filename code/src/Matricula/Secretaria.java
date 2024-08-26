@@ -1,4 +1,4 @@
-package Matricula.secretaria;
+package Matricula;
 
 import Matricula.aluno.Aluno;
 import Matricula.disciplina.Disciplina;

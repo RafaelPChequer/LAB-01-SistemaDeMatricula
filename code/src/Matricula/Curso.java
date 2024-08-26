@@ -1,7 +1,4 @@
-package Matricula.curso;
-
-import Matricula.disciplina.Disciplina;
-import Matricula.util.List;
+package Matricula;
 
 import Matricula.disciplina.Disciplina;
 import java.util.List;

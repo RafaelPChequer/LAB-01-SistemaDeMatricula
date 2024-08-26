@@ -1,4 +1,4 @@
-package Matricula.professor;
+package Matricula;
 
 import Matricula.disciplina.Disciplina;
 import Matricula.aluno.Aluno;
