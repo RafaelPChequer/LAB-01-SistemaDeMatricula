@@ -13,12 +13,12 @@ skinparam actor {
 
 :Usuário: <|-- :Aluno:
 :Usuário: <|-- :Professor:
-:Usuário: <|-- :Administração:
+:Usuário: <|-- :Secretaria:
 
 rectangle "Sistema de Matrícula" {
 
-:Administração: <-- (Realizar Matrícula)
-:Administração: <-- (Cancelar Matrícula)
+:Secretaria: <-- (Realizar Matrícula)
+:Secretaria: <-- (Cancelar Matrícula)
 
 :Aluno: --> (Realizar Matrícula)
 :Aluno: --> (Cancelar Matrícula)

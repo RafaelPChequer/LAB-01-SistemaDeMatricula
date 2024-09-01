@@ -57,12 +57,12 @@ class SistemaDeCobranca {
 Usuario <|-- Aluno
 Usuario <|-- Professor
 Usuario <|-- Secretaria
-Aluno "1" -- "*" Disciplina : matricula
-Professor "1" -- "*" Disciplina : ensina
-Secretaria "1" -- "*" Disciplina : gerencia
-Curso "1" --  Disciplina : contem
-SistemaDeMatricula -- SistemaDeCobranca : notifica
-SistemaDeMatricula -- Secretaria : controla
-SistemaDeCobranca -- Aluno : cobra
+
+Aluno "1" --> "*" Disciplina : matricula
+Professor "1" --> "*" Disciplina : ensina
+Secretaria "1" --> "*" Disciplina : gerencia
+Curso "1" --> "*" Disciplina : contem
+SistemaDeMatricula --> SistemaDeCobranca : notifica
+SistemaDeCobranca --> Aluno : cobra
 
 @enduml
