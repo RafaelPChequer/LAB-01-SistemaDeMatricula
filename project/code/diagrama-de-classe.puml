@@ -1,68 +1,116 @@
 @startuml
+package Matricula {
 
-class Usuario {
-  -id: int
-  -nome: String
-  -senha: String
-  +autenticar(): Boolean
-  +login(): Boolean
-  +logout(): Boolean
+  class Usuario {
+    - int id
+    - String nome
+    - String senha
+    + Usuario(int id, String nome, String senha)
+    + int getId()
+    + String getNome()
+    + String getSenha()
+  }
+
+  class Aluno {
+    - int matricula
+    + Aluno(int id, String nome, String senha)
+    + int getMatricula()
+    + void setMatricula(int matricula)
+  }
+
+  class Professor {
+    + Professor(int id, String nome, String senha)
+  }
+
+  class Secretaria {
+    + Secretaria(int id, String nome, String senha)
+    + boolean realizarMatricula(Turma turma, Aluno aluno)
+    + boolean cancelarMatricula(Turma turma, Aluno aluno)
+    + void notificarCobranca()
+    + void cadastrarDisciplina(int codigo, String nome, int numCreditos)
+    + void cadastrarTurma(Disciplina disciplina, Professor professor, int numero)
+  }
+
+  class Curso {
+    - String nome
+    - List<Disciplina> disciplinas
+    + Curso(String nome, List<Disciplina> disciplinas)
+    + String getNome()
+    + List<Disciplina> getDisciplinas()
+    + void setDisciplinas(List<Disciplina> disciplinas)
+  }
+
+  class Disciplina {
+    - int codigo
+    - String nome
+    - int numCreditos
+    + Disciplina(int codigo, String nome, int numCreditos)
+    + String getNome()
+    + int getCodigo()
+    + int getNumCreditos()
+  }
+
+  class Turma {
+    - Disciplina disciplina
+    - Professor professor
+    - List<Aluno> alunosMatriculados
+    - Status status
+    - int numero
+    + enum Status { ABERTO, FECHADO }
+    + Turma(Disciplina disciplina, Professor professor, List<Aluno> alunosMatriculados, int numero)
+    + boolean adicionarAluno(Aluno aluno)
+    + boolean removerAluno(Aluno aluno)
+    + boolean verificarVagas()
+    + boolean verificarMinimoAlunos()
+    + void setStatus(Status status)
+    + Disciplina getDisciplina()
+    + Professor getProfessor()
+    + void listarAlunos()
+    + Status getStatus()
+    + int getNumero()
+  }
+
+  class SistemaMatricula {
+    - static Map<String, Usuario> usuarios
+    - static List<Curso> cursos
+    - static List<Turma> turmas
+    - static List<Disciplina> disciplinas
+    - static Secretaria secretariaPadrao
+    + static void main(String[] args)
+    + static Usuario login(Scanner scanner)
+    + static void criarConta(Scanner scanner)
+    + static void menuAluno(Scanner scanner, Aluno aluno)
+    + static void solicitarMatricula(Scanner scanner, Aluno aluno)
+    + static void cancelarMatricula(Scanner scanner, Aluno aluno)
+    + static void adicionarDisciplina(Disciplina disciplina)
+    + static void adicionarTurma(Turma turma)
+    + static void menuSecretaria(Scanner scanner, Secretaria secretaria)
+    + static void cadastrarDisciplina(Scanner scanner, Secretaria secretaria)
+    + static void cadastrarTurma(Scanner scanner, Secretaria secretaria)
+    + static void gerenciarCurriculo(Scanner scanner, Secretaria secretaria)
+    + static void menuProfessor(Scanner scanner, Professor professor)
+    + static void listarTurmas()
+    + static void listarAlunosDaTurma(Professor professor)
+    + static void salvarDados()
+    + static void salvarUsuario(Usuario usuario)
+    + static void salvarUsuarios()
+    + static void salvarTurmas()
+    + static void carregarDados()
+    + static void carregarUsuarios(String arquivo, Class<? extends Usuario> classe)
+  }
+
+  Usuario <|-- Aluno
+  Usuario <|-- Professor
+  Usuario <|-- Secretaria
+
+  Curso "1" *-- "many" Disciplina
+  Curriculo "1" *-- "many" Turma
+  Disciplina "1" *-- "many" Turma
+  Professor "1" -- "many" Turma
+  Turma "many" *-- "many" Aluno
+  Secretaria "1" *-- "1" SistemaMatricula
+  SistemaMatricula *-- "many" Turma
+  SistemaMatricula *-- "many" Disciplina
 }
-
-class Aluno{
-  -matricula: int
-  -disciplinasObrigatorias: List<Disciplina>
-  -disciplinasOptativas: List<Disciplina>
-  +matricularEmDisciplina(disciplina: Disciplina): Boolean
-  +cancelarMatricula(disciplina: Disciplina): Boolean
-}
-
-class Professor {
-  -disciplinas: List<Disciplina>
-  +consultarAlunosMatriculados(disciplina: Disciplina): List<Aluno>
-}
-
-class Secretaria {
-  +realizarMatricula(aluno: Aluno, disciplina: Disciplina): Boolean
-  +cancelarMatricula(aluno: Aluno, disciplina: Disciplina): Boolean
-}
-
-class Disciplina {
-  -codigo: int
-  -nome: String
-  -numCreditos: int
-  -maxAlunos: int = 60
-  -alunosMatriculados: List<Aluno>
-  +adicionarAluno(aluno: Aluno): Boolean
-  +removerAluno(aluno: Aluno): Boolean
-  +verificarVagas(): Boolean
-  +verificarMinimoAlunos(): Boolean
-}
-
-class Curso {
-  -nome: String
-  -numCreditos: int
-  -disciplinas: List<Disciplina>
-  +calcularTotalCreditos(): int
-}
-
-class SistemaDeMatricula {
-  +notificarSistemaDeCobranca(aluno: Aluno)
-}
-
-class SistemaDeCobranca {
-  +cobrarAluno(aluno: Aluno, disciplinas: List<Disciplina>)
-}
-
-Usuario <|-- Aluno
-Usuario <|-- Professor
-Usuario <|-- Secretaria
-
-Aluno "1" --> "*" Disciplina : matricula
-Professor "1" --> "*" Disciplina : ensina
-Secretaria "1" --> "*" Disciplina : gerencia
-Curso "1" --> "*" Disciplina : contem
-SistemaDeMatricula --> SistemaDeCobranca : notifica
-SistemaDeCobranca --> Aluno : cobra
 
 @enduml
