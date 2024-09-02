@@ -76,4 +76,8 @@ public class Turma {
     public Status getStatus() {
         return status;
     }
+
+    public int getNumero() {
+        return numero;
+    }
 }

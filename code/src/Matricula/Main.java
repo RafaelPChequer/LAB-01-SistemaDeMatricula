@@ -74,6 +74,28 @@ public class Main {
                         Aluno aluno = (Aluno) loggedInUser;
                         message += String.format("\nNúmero de Matrícula: %d", aluno.getMatricula());
                         JOptionPane.showMessageDialog(null, message);
+
+                        JFrame alunoFrame = new JFrame("Área do Aluno");
+                        alunoFrame.setSize(400, 300);
+                        alunoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        alunoFrame.setLocationRelativeTo(null);
+
+                        JPanel alunoPanel = new JPanel();
+                        alunoPanel.setLayout(null);
+
+                        JButton matricularButton = new JButton("Matricular em Turma");
+                        matricularButton.setBounds(10, 80, 200, 25);
+                        alunoPanel.add(matricularButton);
+
+                        matricularButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                showMatricularTurmaPage(aluno);
+                            }
+                        });
+
+                        alunoFrame.add(alunoPanel);
+                        alunoFrame.setVisible(true);
                     }
 
                     if (loggedInUser instanceof Secretaria) {
@@ -155,6 +177,147 @@ public class Main {
         });
     }
 
+    private static void showMatricularTurmaPage(Aluno aluno) {
+        JFrame matricularFrame = new JFrame("Matricular em Turma");
+        matricularFrame.setSize(400, 300);
+        matricularFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        matricularFrame.setLocationRelativeTo(null);
+
+        JPanel matricularPanel = new JPanel();
+        matricularPanel.setLayout(null);
+
+        JLabel disciplinaLabel = new JLabel("Disciplina:");
+        disciplinaLabel.setBounds(10, 20, 150, 25);
+        matricularPanel.add(disciplinaLabel);
+
+        JComboBox<Disciplina> disciplinaComboBox = new JComboBox<>(loadDisciplinasFromFile().toArray(new Disciplina[0]));
+        disciplinaComboBox.setBounds(170, 20, 200, 25);
+        matricularPanel.add(disciplinaComboBox);
+
+        JLabel turmaLabel = new JLabel("Turma:");
+        turmaLabel.setBounds(10, 60, 150, 25);
+        matricularPanel.add(turmaLabel);
+
+        JComboBox<Turma> turmaComboBox = new JComboBox<>();
+        turmaComboBox.setBounds(170, 60, 200, 25);
+        matricularPanel.add(turmaComboBox);
+
+        JButton carregarTurmasButton = new JButton("Carregar Turmas");
+        carregarTurmasButton.setBounds(10, 100, 150, 25);
+        matricularPanel.add(carregarTurmasButton);
+
+        carregarTurmasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Disciplina disciplinaSelecionada = (Disciplina) disciplinaComboBox.getSelectedItem();
+                if (disciplinaSelecionada != null) {
+                    turmaComboBox.removeAllItems();
+                    List<Turma> turmas = loadTurmasFromFile();
+                    for (Turma turma : turmas) {
+                        if (turma.getDisciplina().equals(disciplinaSelecionada)) {
+                            turmaComboBox.addItem(turma);
+                        }
+                    }
+                }
+            }
+        });
+
+        JButton matricularButton = new JButton("Matricular");
+        matricularButton.setBounds(10, 140, 150, 25);
+        matricularPanel.add(matricularButton);
+
+        matricularButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Turma turmaSelecionada = (Turma) turmaComboBox.getSelectedItem();
+                if (turmaSelecionada != null && turmaSelecionada.adicionarAluno(aluno)) {
+                    saveTurmasToFile(loadTurmasFromFile()); // Atualize o arquivo de turmas
+                    JOptionPane.showMessageDialog(null, "Matriculado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível matricular.");
+                }
+            }
+        });
+
+        matricularFrame.add(matricularPanel);
+        matricularFrame.setVisible(true);
+    }
+
+    private static List<Turma> loadTurmasFromFile() {
+        List<Turma> turmas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("code/turmas.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    int numero = Integer.parseInt(parts[0]);
+                    int disciplinaCodigo = Integer.parseInt(parts[1]);
+                    int professorId = Integer.parseInt(parts[2]);
+                    Disciplina disciplina = findDisciplinaByCodigo(disciplinaCodigo);
+                    Professor professor = findProfessorById(professorId);
+                    Turma turma = new Turma(disciplina, professor, new ArrayList<>(), numero);
+                    turmas.add(turma);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return turmas;
+    }
+
+    private static List<Disciplina> loadDisciplinasFromFile() {
+        List<Disciplina> disciplinas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(DISCIPLINAS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    int codigo = Integer.parseInt(parts[0]);
+                    String nome = parts[1];
+                    int creditos = Integer.parseInt(parts[2]);
+                    disciplinas.add(new Disciplina(codigo, nome, creditos));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return disciplinas;
+    }
+
+
+    private static void saveTurmasToFile(List<Turma> turmas) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("code/turmas.txt"))) {
+            for (Turma turma : turmas) {
+                writer.write(turma.getNumero() + "," + turma.getDisciplina().getCodigo() + "," + turma.getProfessor().getId());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Disciplina findDisciplinaByCodigo(int codigo) {
+        List<Disciplina> disciplinas = loadDisciplinasFromFile();
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getCodigo() == codigo) {
+                return disciplina;
+            }
+        }
+        return null;
+    }
+
+    private static Professor findProfessorById(int id) {
+        List<Usuario> usuarios = loadUsersFromFile();
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof Professor && usuario.getId() == id) {
+                return (Professor) usuario;
+            }
+        }
+        return null;
+    }
+
+
+
     private static void showAlterarCurriculoPage() {
         JFrame alterarCurriculoFrame = new JFrame("Alterar Currículo");
         alterarCurriculoFrame.setSize(400, 300);
@@ -233,7 +396,6 @@ public class Main {
             e.printStackTrace();
         }
     }
-
 
 
     private static void showAddDisciplinaPage() {
