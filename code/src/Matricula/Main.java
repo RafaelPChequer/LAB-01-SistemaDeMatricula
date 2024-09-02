@@ -204,7 +204,6 @@ public class Main {
                         int semestre = Integer.parseInt(semestreText);
                         int ano = Integer.parseInt(anoText);
 
-                        // Adaptar a criação do Curriculo com um Curso, por exemplo
                         Curso curso = new Curso(nomeCurriculo, new ArrayList<>()); // Adapte conforme necessário
                         Curriculo curriculo = new Curriculo(semestre, ano, curso);
 
