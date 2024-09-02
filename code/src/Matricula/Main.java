@@ -10,6 +10,8 @@ import java.util.List;
 public class Main {
 
     private static final String USERS_FILE = "code/usuarios.txt";
+    private static final String DISCIPLINAS_FILE = "code/disciplinas.txt";
+    private static final String CURRICULOS_FILE = "code/curriculos.txt";
     private static int nextId = 1;
 
     public static void main(String[] args) {
@@ -21,16 +23,16 @@ public class Main {
         JFrame frame = new JFrame("Login");
         frame.setSize(300, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null); // Centralizar a janela
+        frame.setLocationRelativeTo(null); // Centraliza a janela
 
         JPanel panel = new JPanel();
         frame.add(panel);
-        placeComponents(panel);
+        placeComponents(frame, panel);
 
         frame.setVisible(true);
     }
 
-    private static void placeComponents(JPanel panel) {
+    private static void placeComponents(JFrame frame, JPanel panel) {
         panel.setLayout(null);
 
         JLabel userLabel = new JLabel("Usuário:");
@@ -63,8 +65,60 @@ public class Main {
                 String userName = userText.getText();
                 String password = new String(passwordField.getPassword());
 
-                if (validateLogin(userName, password)) {
-                    JOptionPane.showMessageDialog(null, "Login bem-sucedido como " + userName + "!");
+                Usuario loggedInUser = validateLogin(userName, password);
+                if (loggedInUser != null) {
+                    String message = String.format("Login bem-sucedido como %s!\nTipo: %s\nID: %d",
+                            loggedInUser.getNome(), loggedInUser.getClass().getSimpleName(), loggedInUser.getId());
+
+                    if (loggedInUser instanceof Aluno) {
+                        Aluno aluno = (Aluno) loggedInUser;
+                        message += String.format("\nNúmero de Matrícula: %d", aluno.getMatricula());
+                        JOptionPane.showMessageDialog(null, message);
+                    }
+
+                    if (loggedInUser instanceof Secretaria) {
+                        JOptionPane.showMessageDialog(null, message);
+
+                        JFrame secretariaFrame = new JFrame("Área da Secretaria");
+                        secretariaFrame.setSize(400, 300);
+                        secretariaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        secretariaFrame.setLocationRelativeTo(null);
+
+                        JPanel secretariaPanel = new JPanel();
+                        secretariaPanel.setLayout(null);
+
+                        JLabel secretariaInfoLabel = new JLabel("Informações da Secretaria:");
+                        secretariaInfoLabel.setBounds(10, 10, 300, 25);
+                        secretariaPanel.add(secretariaInfoLabel);
+
+                        JButton addDisciplinaButton = new JButton("Adicionar Disciplina");
+                        addDisciplinaButton.setBounds(10, 50, 200, 25);
+                        secretariaPanel.add(addDisciplinaButton);
+
+                        addDisciplinaButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // Esconder a janela da secretaria e abrir a página de adicionar disciplinas
+                                secretariaFrame.setVisible(false);
+                                showAddDisciplinaPage();
+                            }
+                        });
+
+                        JButton alterarCurriculoButton = new JButton("Alterar Currículo");
+                        alterarCurriculoButton.setBounds(10, 90, 200, 25);
+                        secretariaPanel.add(alterarCurriculoButton);
+
+                        alterarCurriculoButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                showAlterarCurriculoPage();
+                            }
+                        });
+
+
+                        secretariaFrame.add(secretariaPanel);
+                        secretariaFrame.setVisible(true);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Nome de usuário ou senha incorretos.");
                 }
@@ -101,14 +155,155 @@ public class Main {
         });
     }
 
-    private static boolean validateLogin(String userName, String password) {
+    private static void showAlterarCurriculoPage() {
+        JFrame alterarCurriculoFrame = new JFrame("Alterar Currículo");
+        alterarCurriculoFrame.setSize(400, 300);
+        alterarCurriculoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        alterarCurriculoFrame.setLocationRelativeTo(null);
+
+        JPanel alterarCurriculoPanel = new JPanel();
+        alterarCurriculoPanel.setLayout(null);
+
+        JLabel nomeCurriculoLabel = new JLabel("Nome do Currículo:");
+        nomeCurriculoLabel.setBounds(10, 20, 150, 25);
+        alterarCurriculoPanel.add(nomeCurriculoLabel);
+
+        JTextField nomeCurriculoField = new JTextField(20);
+        nomeCurriculoField.setBounds(170, 20, 200, 25);
+        alterarCurriculoPanel.add(nomeCurriculoField);
+
+        JLabel semestreLabel = new JLabel("Semestre:");
+        semestreLabel.setBounds(10, 60, 150, 25);
+        alterarCurriculoPanel.add(semestreLabel);
+
+        JTextField semestreField = new JTextField(20);
+        semestreField.setBounds(170, 60, 200, 25);
+        alterarCurriculoPanel.add(semestreField);
+
+        JLabel anoLabel = new JLabel("Ano:");
+        anoLabel.setBounds(10, 100, 150, 25);
+        alterarCurriculoPanel.add(anoLabel);
+
+        JTextField anoField = new JTextField(20);
+        anoField.setBounds(170, 100, 200, 25);
+        alterarCurriculoPanel.add(anoField);
+
+        JButton saveButton = new JButton("Salvar Alterações");
+        saveButton.setBounds(10, 150, 150, 25);
+        alterarCurriculoPanel.add(saveButton);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeCurriculo = nomeCurriculoField.getText();
+                String semestreText = semestreField.getText();
+                String anoText = anoField.getText();
+
+                if (!nomeCurriculo.isEmpty() && !semestreText.isEmpty() && !anoText.isEmpty()) {
+                    try {
+                        int semestre = Integer.parseInt(semestreText);
+                        int ano = Integer.parseInt(anoText);
+
+                        // Adaptar a criação do Curriculo com um Curso, por exemplo
+                        Curso curso = new Curso(nomeCurriculo, new ArrayList<>()); // Adapte conforme necessário
+                        Curriculo curriculo = new Curriculo(semestre, ano, curso);
+
+                        // Salvar as informações do currículo em curriculos.txt
+                        saveCurriculoToFile(curriculo);
+
+                        JOptionPane.showMessageDialog(null, "Currículo alterado com sucesso!");
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Semestre e Ano devem ser números inteiros.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Preencha todos os campos corretamente.");
+                }
+            }
+        });
+
+        alterarCurriculoFrame.add(alterarCurriculoPanel);
+        alterarCurriculoFrame.setVisible(true);
+    }
+
+    private static void saveCurriculoToFile(Curriculo curriculo) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CURRICULOS_FILE, true))) {
+            // Adapte o formato para incluir o nome do curso se necessário
+            writer.write(curriculo.getSemestre() + "," + curriculo.getAno());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private static void showAddDisciplinaPage() {
+        JFrame addDisciplinaFrame = new JFrame("Adicionar Disciplina");
+        addDisciplinaFrame.setSize(400, 300);
+        addDisciplinaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addDisciplinaFrame.setLocationRelativeTo(null);
+
+        JPanel addDisciplinaPanel = new JPanel();
+        addDisciplinaPanel.setLayout(null);
+
+        JLabel nomeDisciplinaLabel = new JLabel("Nome da Disciplina:");
+        nomeDisciplinaLabel.setBounds(10, 20, 150, 25);
+        addDisciplinaPanel.add(nomeDisciplinaLabel);
+
+        JTextField nomeDisciplinaField = new JTextField(20);
+        nomeDisciplinaField.setBounds(170, 20, 200, 25);
+        addDisciplinaPanel.add(nomeDisciplinaField);
+
+        JLabel codigoDisciplinaLabel = new JLabel("Código da Disciplina:");
+        codigoDisciplinaLabel.setBounds(10, 60, 150, 25);
+        addDisciplinaPanel.add(codigoDisciplinaLabel);
+
+        JTextField codigoDisciplinaField = new JTextField(20);
+        codigoDisciplinaField.setBounds(170, 60, 200, 25);
+        addDisciplinaPanel.add(codigoDisciplinaField);
+
+        JLabel numeroCreditosLabel = new JLabel("Número de Créditos:");
+        numeroCreditosLabel.setBounds(10, 100, 150, 25);
+        addDisciplinaPanel.add(numeroCreditosLabel);
+
+        JTextField numeroCreditosField = new JTextField(20);
+        numeroCreditosField.setBounds(170, 100, 200, 25);
+        addDisciplinaPanel.add(numeroCreditosField);
+
+        JButton saveButton = new JButton("Salvar Disciplina");
+        saveButton.setBounds(10, 150, 150, 25);
+        addDisciplinaPanel.add(saveButton);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeDisciplina = nomeDisciplinaField.getText();
+                int codigoDisciplina = Integer.parseInt(codigoDisciplinaField.getText());
+                int numeroCreditos = Integer.parseInt(numeroCreditosField.getText());
+
+                if (!nomeDisciplina.isEmpty() && !codigoDisciplinaField.getText().isEmpty()
+                        && !numeroCreditosField.getText().isEmpty()) {
+                    Disciplina novaDisciplina = new Disciplina(codigoDisciplina, nomeDisciplina, numeroCreditos);
+                    saveDisciplinaToFile(novaDisciplina);
+                    JOptionPane.showMessageDialog(null, "Disciplina " + novaDisciplina.getNome() + " adicionada com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Preencha todos os campos corretamente.");
+                }
+            }
+        });
+
+        addDisciplinaFrame.add(addDisciplinaPanel);
+        addDisciplinaFrame.setVisible(true);
+    }
+
+    private static Usuario validateLogin(String userName, String password) {
         List<Usuario> usuarios = loadUsersFromFile();
         for (Usuario user : usuarios) {
             if (user.getNome().equals(userName) && user.getSenha().equals(password)) {
-                return true;
+                return user;
             }
         }
-        return false;
+        return null;
     }
 
     private static boolean createUser(String userName, String password, String userType) {
@@ -187,4 +382,14 @@ public class Main {
             e.printStackTrace();
         }
     }
+
+    private static void saveDisciplinaToFile(Disciplina disciplina) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(DISCIPLINAS_FILE, true))) {
+            writer.write(disciplina.getCodigo() + "," + disciplina.getNome() + "," + disciplina.getNumCreditos());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

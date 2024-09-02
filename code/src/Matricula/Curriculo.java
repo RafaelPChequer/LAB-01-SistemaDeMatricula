@@ -1,18 +1,65 @@
 package Matricula;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Curriculo {
     private int semestre;
     private int ano;
+    private Curso curso;
     private List<Turma> turmas;
 
-    public boolean adicionarTurma(Turma turma) {
-        turmas.add(turma);
-        return true;
+    public Curriculo(int semestre, int ano, Curso curso) {
+        this.semestre = semestre;
+        this.ano = ano;
+        this.curso = curso;
+        this.turmas = new ArrayList<>();
     }
 
-    public void atualizarStatusTurmas(List<Turma> turmas) {
+    public int getSemestre() {
+        return semestre;
+    }
+
+    public void setSemestre(int semestre) {
+        this.semestre = semestre;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public List<Turma> getTurmas() {
+        return turmas;
+    }
+
+    public void setTurmas(List<Turma> turmas) {
+        this.turmas = turmas;
+    }
+
+    // Adiciona uma turma ao currículo
+    public void adicionarTurma(Turma turma) {
+        turmas.add(turma);
+    }
+
+    // Remove uma turma do currículo
+    public void removerTurma(Turma turma) {
+        turmas.remove(turma);
+    }
+
+    // Desativa turmas com menos de 3 alunos
+    public void desativarTurmasInativas() {
         for (Turma turma : turmas) {
             if (!turma.verificarMinimoAlunos()) {
                 turma.setStatus(Turma.Status.FECHADO);
@@ -20,49 +67,12 @@ public class Curriculo {
         }
     }
 
-    public Map<String, List<Turma>> listarTurmasPorDisciplina() {
-        Map<String, List<Turma>> turmasPorDisciplina = new HashMap<>();
-
+    // Reativa turmas que tem 3 ou mais alunos
+    public void reativarTurmas() {
         for (Turma turma : turmas) {
-            String nomeDisciplina = turma.getDisciplina().getNome();
-            turmasPorDisciplina
-                    .computeIfAbsent(nomeDisciplina, k -> new ArrayList<>())
-                    .add(turma);
-        }
-
-        return turmasPorDisciplina;
-    }
-
-    public void listarTurmasPorProfessor(Professor professor) {
-        Scanner scanner = new Scanner(System.in);
-        List<Turma> turmasDoProfessor = new ArrayList<>();
-
-        // Filtra as turmas do professor
-        for (Turma turma : turmas) {
-            if (turma.getProfessor().equals(professor)) {
-                turmasDoProfessor.add(turma);
+            if (turma.verificarVagas() && turma.getStatus() == Turma.Status.FECHADO) {
+                turma.setStatus(Turma.Status.ABERTO);
             }
-        }
-
-        if (turmasDoProfessor.isEmpty()) {
-            System.out.println("Este professor não tem turmas.");
-            return;
-        }
-
-        System.out.println("Turmas do professor " + professor.getNome() + ":");
-        for (int i = 0; i < turmasDoProfessor.size(); i++) {
-            System.out.println((i + 1) + ". " + turmasDoProfessor.get(i).getDisciplina().getNome());
-        }
-
-        System.out.print("Escolha o número da turma para listar os alunos: ");
-        int escolha = scanner.nextInt();
-
-        if (escolha > 0 && escolha <= turmasDoProfessor.size()) {
-            Turma turmaEscolhida = turmasDoProfessor.get(escolha - 1);
-            System.out.println("Alunos da turma " + turmaEscolhida.getDisciplina().getNome() + ":");
-            turmaEscolhida.listarAlunos();
-        } else {
-            System.out.println("Opção inválida.");
         }
     }
 }

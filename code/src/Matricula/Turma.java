@@ -7,6 +7,7 @@ public class Turma {
     private Professor professor;
     private List<Aluno> alunosMatriculados;
     private Status status;
+    private int numero;
 
     private static final int MIN_ALUNOS = 3;
     private static final int MAX_ALUNOS = 60;
@@ -16,11 +17,12 @@ public class Turma {
         FECHADO
     }
 
-    public Turma(Disciplina disciplina, Professor professor, List<Aluno> alunosMatriculados) {
+    public Turma(Disciplina disciplina, Professor professor, List<Aluno> alunosMatriculados, int numero) {
         this.disciplina = disciplina;
         this.professor = professor;
         this.alunosMatriculados = alunosMatriculados;
-        this.status = Status.ABERTO;  // Inicialmente, a turma começa com status ABERTO
+        this.status = Status.ABERTO;
+        this.numero = numero;
     }
 
     public boolean adicionarAluno(Aluno aluno) {
@@ -69,5 +71,9 @@ public class Turma {
         for (Aluno aluno : alunosMatriculados) {
             System.out.println(aluno.getNome());
         }
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

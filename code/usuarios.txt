@@ -1,2 +1,4 @@
 1,rafael,123456,Aluno
 2,ra,12345,Professor
+3,augusto,123456,Aluno
+4,pedro,123456,Secretaria
