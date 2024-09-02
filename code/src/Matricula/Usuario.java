@@ -1,21 +1,25 @@
 package Matricula;
-public class Usuario {
+
+public abstract class Usuario {
     private int id;
     private String nome;
     private String senha;
 
-    public boolean autenticar() {
-        // Implementação do método de autenticação
-        return false;
+    public Usuario(int id, String nome, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.senha = senha;
     }
 
-    public boolean login() {
-        // Implementação do login
-        return false;
+    public int getId() {
+        return id;
     }
 
-    public boolean logout() {
-        // Implementação do logout
-        return false;
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSenha() {
+        return senha;
     }
 }

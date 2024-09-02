@@ -1,0 +1,2 @@
+1,rafael,123456,Aluno
+2,ra,12345,Professor
